@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 {
 	DIR *dir;
 	struct dirent *dirent;
+	printf("helo world from process ID %ld\n", (long)getpid());
 	if(argc < 2)
 	{
 		printf("usage: ./opendir directory\n");
