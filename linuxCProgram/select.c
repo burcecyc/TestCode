@@ -13,7 +13,9 @@
 #include <fcntl.h>
 #include <sys/select.h>
 #include <sys/time.h>
-
+//int select(int maxfdp,fd_set *readfds,fd_set *writefds,fd_set *errorfds,struct timeval*timeout); 
+//maxfdp:为所有fd_set集合中的fd个数+1
+//fd_set集合有　readfds, writefds, errorfds, 比如只监视readfds,其余为0那么，当readfds中的任何一个fd可读时，select返回可读的fd的个数
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +26,7 @@ int main(int argc, char *argv[])
 	fd_set myset;
 	struct timeval tm;
 	fd = open("/dev/input/mouse0", O_RDONLY);
+	printf("mouse fd = %d\n", fd);
 	if(fd < 0)
 	{
 		perror("open");
@@ -50,8 +53,9 @@ int main(int argc, char *argv[])
 	{
 		printf("超时了");
 	}
-	else
+	else if (ret > 0) //有fd可读事件发生
 	{
+		printf("ret = %d\n", ret);//比如当只有鼠标事件发生时ret = 1
 		if(FD_ISSET(0, &myset))
 		{
 			memset(buf, 0, sizeof(buf));
